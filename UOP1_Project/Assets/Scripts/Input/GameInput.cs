@@ -59,7 +59,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""ExtraAction"",
+                    ""name"": ""OpenInventory"",
                     ""type"": ""Button"",
                     ""id"": ""1b6ae4df-f5e6-42fc-92b6-3dcc2e126563"",
                     ""expectedControlType"": ""Button"",
@@ -293,7 +293,18 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""91ce58d8-88e1-4ade-945b-59c4f0939828"",
-                    ""path"": ""<Keyboard>/j"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c248131-d3fe-4545-b4dc-ba0690c01312"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -348,11 +359,11 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""937b421c-9467-4b47-a1fd-445b9b44d5c9"",
-                    ""path"": ""<Keyboard>/l"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""ExtraAction"",
+                    ""action"": ""OpenInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -363,7 +374,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""ExtraAction"",
+                    ""action"": ""OpenInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -379,7 +390,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Keyboard TFGH"",
+                    ""name"": ""Keyboard IJKL"",
                     ""id"": ""8e17360e-f036-4963-93f6-05d14787dfb5"",
                     ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
@@ -392,7 +403,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""9a4ec3f5-78bf-4f42-b7d7-f1edd7ce12dc"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -403,7 +414,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""5d82874e-55d8-4d54-84f5-c4d59dc3b39c"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -414,7 +425,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""13a13bd5-f4ec-4f5b-9a8e-ef1165cc9f5f"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -425,18 +436,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""78626b57-196b-4f24-9a3f-af2477d3633b"",
-                    ""path"": ""<Keyboard>/h"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""RotateCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""4e483eb2-4460-4dc1-af9f-9bcb31ebe837"",
-                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -1177,7 +1177,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		m_Gameplay_Attack = m_Gameplay.FindAction("Attack", throwIfNotFound: true);
 		m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
 		m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
-		m_Gameplay_ExtraAction = m_Gameplay.FindAction("ExtraAction", throwIfNotFound: true);
+		m_Gameplay_OpenInventory = m_Gameplay.FindAction("OpenInventory", throwIfNotFound: true);
 		m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
 		m_Gameplay_MouseControlCamera = m_Gameplay.FindAction("MouseControlCamera", throwIfNotFound: true);
 		m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
@@ -1246,7 +1246,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 	private readonly InputAction m_Gameplay_Attack;
 	private readonly InputAction m_Gameplay_Interact;
 	private readonly InputAction m_Gameplay_Pause;
-	private readonly InputAction m_Gameplay_ExtraAction;
+	private readonly InputAction m_Gameplay_OpenInventory;
 	private readonly InputAction m_Gameplay_RotateCamera;
 	private readonly InputAction m_Gameplay_MouseControlCamera;
 	private readonly InputAction m_Gameplay_Run;
@@ -1259,7 +1259,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		public InputAction @Attack => m_Wrapper.m_Gameplay_Attack;
 		public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
 		public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
-		public InputAction @ExtraAction => m_Wrapper.m_Gameplay_ExtraAction;
+		public InputAction @OpenInventory => m_Wrapper.m_Gameplay_OpenInventory;
 		public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
 		public InputAction @MouseControlCamera => m_Wrapper.m_Gameplay_MouseControlCamera;
 		public InputAction @Run => m_Wrapper.m_Gameplay_Run;
@@ -1287,9 +1287,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
 				@Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
 				@Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
-				@ExtraAction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExtraAction;
-				@ExtraAction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExtraAction;
-				@ExtraAction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExtraAction;
+				@OpenInventory.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenInventory;
+				@OpenInventory.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenInventory;
+				@OpenInventory.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenInventory;
 				@RotateCamera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
 				@RotateCamera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
 				@RotateCamera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
@@ -1318,9 +1318,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@Pause.started += instance.OnPause;
 				@Pause.performed += instance.OnPause;
 				@Pause.canceled += instance.OnPause;
-				@ExtraAction.started += instance.OnExtraAction;
-				@ExtraAction.performed += instance.OnExtraAction;
-				@ExtraAction.canceled += instance.OnExtraAction;
+				@OpenInventory.started += instance.OnOpenInventory;
+				@OpenInventory.performed += instance.OnOpenInventory;
+				@OpenInventory.canceled += instance.OnOpenInventory;
 				@RotateCamera.started += instance.OnRotateCamera;
 				@RotateCamera.performed += instance.OnRotateCamera;
 				@RotateCamera.canceled += instance.OnRotateCamera;
@@ -1457,7 +1457,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		void OnAttack(InputAction.CallbackContext context);
 		void OnInteract(InputAction.CallbackContext context);
 		void OnPause(InputAction.CallbackContext context);
-		void OnExtraAction(InputAction.CallbackContext context);
+		void OnOpenInventory(InputAction.CallbackContext context);
 		void OnRotateCamera(InputAction.CallbackContext context);
 		void OnMouseControlCamera(InputAction.CallbackContext context);
 		void OnRun(InputAction.CallbackContext context);
