@@ -5,36 +5,22 @@ using UnityEngine;
 public class InspectorFiller : MonoBehaviour
 {
 
-	[SerializeField]
-	private SimpleInventoryInspectorFiller simpleInventoryInspector;
-
-	[SerializeField]
-	private CookingInventoryInspectorFiller cookingInventoryInspector;
+	[SerializeField] private InventoryInspectorFiller _inventoryInspector = default;
 
 	public void FillItemInspector(Item itemToInspect, bool[] availabilityArray = null)
 	{
+
 		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook);
 
-		simpleInventoryInspector.gameObject.SetActive(!isForCooking);
-		cookingInventoryInspector.gameObject.SetActive(isForCooking);
-
-		if (!isForCooking)
-		{
-
-			simpleInventoryInspector.FillItemInspector(itemToInspect);
-		}
-		else
-		{
-			cookingInventoryInspector.FillItemInspector(itemToInspect, availabilityArray);
-		}
+		_inventoryInspector.gameObject.SetActive(true);
+		_inventoryInspector.FillItemInspector(itemToInspect, isForCooking, availabilityArray);
 
 
 	}
 
 	public void HideItemInspector()
 	{
-		simpleInventoryInspector.gameObject.SetActive(false);
-		cookingInventoryInspector.gameObject.SetActive(false);
+		_inventoryInspector.gameObject.SetActive(false);
 
 
 	}

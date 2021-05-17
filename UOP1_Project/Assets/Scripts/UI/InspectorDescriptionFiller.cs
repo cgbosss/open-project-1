@@ -4,23 +4,25 @@ using UnityEngine;
 
 using UnityEngine.Localization.Components;
 
+
 public class InspectorDescriptionFiller : MonoBehaviour
 {
-	[SerializeField]
-	private LocalizeStringEvent textDescription;
+	[SerializeField] private LocalizeStringEvent _textDescription = default;
 
-	[SerializeField]
-	private LocalizeStringEvent textName;
+	[SerializeField] private LocalizeStringEvent _textName = default;
 
 	public void FillDescription(Item itemToInspect)
 	{
-		textName.gameObject.SetActive(true);
-		textDescription.gameObject.SetActive(true);
 
+		_textName.StringReference = itemToInspect.Name;
+		_textName.StringReference.Arguments = new[] { new { Purpose = 0, Amount = 1 } };
+		_textDescription.StringReference = itemToInspect.Description;
 
-		textName.StringReference = itemToInspect.Name;
-		textDescription.StringReference = itemToInspect.Description;
+		_textName.gameObject.SetActive(true);
+		_textDescription.gameObject.SetActive(true);
+
 
 	}
+
 
 }

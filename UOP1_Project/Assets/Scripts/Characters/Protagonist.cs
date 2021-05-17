@@ -11,16 +11,24 @@ public class Protagonist : MonoBehaviour
 
 	[SerializeField] private VoidEventChannelSO _openInventoryChannel = default;
 
-	private Vector2 _previousMovementInput;
+	private Vector2 _inputVector;
+	private float _previousSpeed;
 
 	//These fields are read and manipulated by the StateMachine actions
-	[HideInInspector] public bool jumpInput;
-	[HideInInspector] public bool extraActionInput;
-	[HideInInspector] public bool attackInput;
-	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
-	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
-	[HideInInspector] public ControllerColliderHit lastHit;
-	[HideInInspector] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+	[NonSerialized] public bool jumpInput;
+	[NonSerialized] public bool extraActionInput;
+	[NonSerialized] public bool attackInput;
+	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
+	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
+	[NonSerialized] public ControllerColliderHit lastHit;
+	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+
+	public const float GRAVITY_MULTIPLIER = 5f;
+	public const float MAX_FALL_SPEED = -50f;
+	public const float MAX_RISE_SPEED = 100f;
+	public const float GRAVITY_COMEBACK_MULTIPLIER = .03f;
+	public const float GRAVITY_DIVIDER = .6f;
+	public const float AIR_RESISTANCE = 5f;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -36,7 +44,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.openInventoryEvent += OnOpenInventory;
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
-		_inputReader.attackEvent += OnAttack;
+		_inputReader.attackEvent += OnStartedAttack;
 		//...
 	}
 
@@ -49,6 +57,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.openInventoryEvent -= OnOpenInventory;
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
+		_inputReader.attackEvent -= OnStartedAttack;
 		//...
 	}
 
@@ -59,6 +68,9 @@ public class Protagonist : MonoBehaviour
 
 	private void RecalculateMovement()
 	{
+		float targetSpeed = 0f;
+		Vector3 adjustedMovement;
+
 		if (gameplayCameraTransform.isSet)
 		{
 			//Get the two axes from the camera and flatten them on the XZ plane
@@ -68,29 +80,44 @@ public class Protagonist : MonoBehaviour
 			cameraRight.y = 0f;
 
 			//Use the two axes, modulated by the corresponding inputs, and construct the final vector
-			Vector3 adjustedMovement = cameraRight.normalized * _previousMovementInput.x +
-				cameraForward.normalized * _previousMovementInput.y;
-
-			movementInput = Vector3.ClampMagnitude(adjustedMovement, 1f);
+			adjustedMovement = cameraRight.normalized * _inputVector.x +
+				cameraForward.normalized * _inputVector.y;
 		}
 		else
 		{
 			//No CameraManager exists in the scene, so the input is just used absolute in world-space
 			Debug.LogWarning("No gameplay camera in the scene. Movement orientation will not be correct.");
-			movementInput = new Vector3(_previousMovementInput.x, 0f, _previousMovementInput.y);
+			adjustedMovement = new Vector3(_inputVector.x, 0f, _inputVector.y);
 		}
 
-		// This is used to set the speed to the maximum if holding the Shift key,
-		// to allow keyboard players to "run"
-		if (isRunning)
-			movementInput.Normalize();
+		//Fix to avoid getting a Vector3.zero vector, which would result in the player turning to x:0, z:0
+		if (_inputVector.sqrMagnitude == 0f)
+			adjustedMovement = transform.forward * (adjustedMovement.magnitude + .01f);
+
+		//Accelerate/decelerate
+		targetSpeed = Mathf.Clamp01(_inputVector.magnitude);
+		if (targetSpeed > 0f)
+		{
+			// This is used to set the speed to the maximum if holding the Shift key,
+			// to allow keyboard players to "run"
+			if(isRunning)
+				targetSpeed = 1f;
+
+			if (attackInput)
+				targetSpeed = .05f;
+		}
+		targetSpeed = Mathf.Lerp(_previousSpeed, targetSpeed, Time.deltaTime * 4f);
+
+		movementInput = adjustedMovement.normalized * targetSpeed;
+
+		_previousSpeed = targetSpeed;
 	}
 
 	//---- EVENT LISTENERS ----
 
 	private void OnMove(Vector2 movement)
 	{
-		_previousMovementInput = movement;
+		_inputVector = movement;
 	}
 
 	private void OnJumpInitiated()
@@ -110,7 +137,13 @@ public class Protagonist : MonoBehaviour
 	private void OnOpenInventory()
 	{
 		_openInventoryChannel.RaiseEvent();
+
+
 	}
 
-	private void OnAttack() => attackInput = true;
+
+	private void OnStartedAttack() => attackInput = true;
+
+	// Triggered from Animation Event
+	public void ConsumeAttackInput() => attackInput = false;
 }

@@ -10,7 +10,7 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 	[SerializeField]
 	private List<InventoryTypeTabFiller> instantiatedGameObjects;
 
-	public void FillTabs(List<InventoryTabType> typesList, InventoryTabType selectedType, TabEventChannelSo changeTabEvent)
+	public void FillTabs(List<InventoryTabType> typesList, InventoryTabType selectedType, TabEventChannelSO changeTabEvent)
 	{
 
 		if (instantiatedGameObjects == null)
@@ -32,7 +32,7 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 				}
 				bool isSelected = typesList[i] == selectedType;
 				//fill
-				instantiatedGameObjects[i].fillTab(typesList[i], isSelected, changeTabEvent);
+				instantiatedGameObjects[i].fillTab(typesList[i], isSelected);
 				instantiatedGameObjects[i].gameObject.SetActive(true);
 
 			}

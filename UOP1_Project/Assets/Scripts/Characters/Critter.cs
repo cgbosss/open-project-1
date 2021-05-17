@@ -1,44 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Critter : MonoBehaviour
 {
-	[SerializeField] private int _fullHealth = 20;
+	[HideInInspector] public bool isPlayerInAlertZone;
+	[HideInInspector] public bool isPlayerInAttackZone;
+	public Damageable currentTarget; //The StateMachine evaluates its health when needed
 
-	private int _currentHealth = default;
-
-	public bool isPlayerInAlertZone { get; set; }
-	public bool isPlayerInAttackZone { get; set; }
-	public bool getHit { get; set; }
-	public bool isDead { get; set; }
-
-	private void Awake()
+	public void OnAlertTriggerChange(bool entered, GameObject who)
 	{
-		_currentHealth = _fullHealth;
-	}
+		isPlayerInAlertZone = entered;
 
-	private void ReceiveAnAttack(int damange)
-	{
-		_currentHealth -= damange;
-		getHit = true;
-		if (_currentHealth <= 0)
+		if (entered && who.TryGetComponent(out Damageable d))
 		{
-			isDead = true;
+			currentTarget = d;
+			currentTarget.OnDie += OnTargetDead;
+		}
+		else
+		{
+			currentTarget = null;
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
+	public void OnAttackTriggerChange(bool entered, GameObject who)
 	{
-		Weapon playerWeapon = other.GetComponent<Weapon>();
-		if (!getHit && playerWeapon != null && playerWeapon.Enable)
-		{
-			ReceiveAnAttack(playerWeapon.AttackStrength);
-		}
+		isPlayerInAttackZone = entered;
+
+		//No need to set the target. If we did, we would get currentTarget to null even if
+		//a target exited the Attack zone (inner) but stayed in the Alert zone (outer).
 	}
 
-	public void DestroyCritter()
+	private void OnTargetDead()
 	{
-		GameObject.Destroy(this.gameObject);
+		currentTarget = null;
+		isPlayerInAlertZone = false;
+		isPlayerInAttackZone = false;
 	}
 }
